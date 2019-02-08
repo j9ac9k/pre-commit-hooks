@@ -1,16 +1,16 @@
-- id: pipenv-to-requirements
-  name: pipenv to requirements
-  description:  If change to Pipfile, it makes sure that pipenv-to-requirements is executed
-  entry: pipenv_to_requirements
-  files: "^Pipfile$"
-  language: system
-  types: [file, non-executable, text]
-  pass_filenames: false
 - id: pipfile-lock-sync
   name: Pipfile.lock sync
   description: when committing a change to Pipfile, make sure Pipfile.lock is in sync
   entry: pipenv lock --clear
   files: "^Pipfile$"
+  language: system
+  types: [file, non-executable, text]
+  pass_filenames: false
+- id: requirements-sync
+  name: Requirements.txt sync
+  description: when Pipfile.lock changes, update the requirements[-dev].txt accordingly
+  entry: pipenv lock -r | tee requirements.txt && pipenv lock -r --dev | tee requirements-dev.txt
+  files: "^Pipfile.lock$"
   language: system
   types: [file, non-executable, text]
   pass_filenames: false
